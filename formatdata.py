@@ -1,11 +1,11 @@
 import csv
 
 comma = ","
-label = "good"
-#label = "bad,"
+#label = "good"
+label = "bad"
 
 # Open the CSV file
-with open('domains.csv', mode ='r') as fileInput:
+with open('stripped-blocklist.csv', mode ='r') as fileInput:
   # Open the CSV file
   with open('dataset.csv', mode ='a', newline='') as fileOutput:
     # open reader to CSV file
