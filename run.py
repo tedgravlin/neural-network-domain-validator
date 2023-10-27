@@ -33,5 +33,3 @@ print (classification_report(y_test, predictions))
 print(confusion_matrix(y_test,predictions))
 
 print("Accuracy: {}".format(model.score(features_test,y_test)))
-
-def test() 
