@@ -1,39 +1,88 @@
 import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.preprocessing import OneHotEncoder
-from sklearn import svm 
-from sklearn.metrics import classification_report
+from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+import joblib
+import os
 
-dataset = pd.read_csv('dataset.csv')
-print("Dataset read")
+def create_model():
+    # Get the dataset CSV file
+    dataset = pd.read_csv("dataset.csv")
 
-#ohe = OneHotEncoder()
-#transformed = ohe.fit_transform(dataset[['Label']])
-#print(transformed.toarray())
-#print(ohe.categories_)
+    # Turn the dataset into a pandas data frame
+    dataframe = pd.DataFrame(dataset)
 
-y = dataset['Label']
-z = dataset['URL']
-z_train, z_test,y_train, y_test = train_test_split(z,y,test_size = 0.2)
+    # Dataset columns
+    x = dataframe['URL']
+    y = dataframe['Label']
 
-cv = CountVectorizer()
-features = cv.fit_transform(z_train)
-print("fit_transform completed")
+    #Split train and test data
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
-model = svm.SVC()
-model.fit(features,y_train)
-print("model.fit completed")
+    # Initialize the TF-IDF vectorizer
+    tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5, norm='l2', encoding='latin-1', ngram_range=(1, 2),
+    stop_words='english')
 
-features_test = cv.transform(z_test)
-print("transform completed")
+    # Generate features for x_train and x_test
+    features_train = tfidf.fit_transform(x_train)
+    features_test = tfidf.transform(x_test)
 
-predictions = model.predict(features_test)
-print('predicted', predictions)
+    # MLP model
+    model = MLPClassifier(
+        activation='relu',
+        solver='adam', 
+        batch_size=50,
+        alpha=1e-5,
+        hidden_layer_sizes=(150,140,130),
+        random_state=42,
+        learning_rate='adaptive'
+    )
 
-print (classification_report(y_test, predictions))
+    # Fit the model
+    model.fit(features_train, y_train)
 
-print(confusion_matrix(y_test,predictions))
+    # Predicting the Test set results
+    predictions = model.predict(features_test)
 
-print("Accuracy: {}".format(model.score(features_test,y_test)))
+    # Print the classification report
+    print("Classification Report")
+    print(classification_report(y_test, predictions))
+
+    # Print the confusion matrix
+    print("Confusion Matrix")
+    print(confusion_matrix(y_test,predictions))
+
+    # Print the model accuracy
+    print("Accuracy: ", model.score(features_test,y_test) * 100)
+
+    # Store the model in storage
+    joblib.dump(model,"./models/model.pkl")
+    # Store the vectorizer in storage
+    joblib.dump(tfidf, "./models/tfidf.pkl")
+
+def test_model(model, tfidf):
+    # Test domains
+    test_domains = ['google.com','googl.com']
+
+    # Use the model to predict the label for each of 
+    # the test domains and then print the result
+    for domain in range(len(test_domains)):
+        print(test_domains[domain])
+        test_result = tfidf.transform([test_domains[domain]])
+        prediction = model.predict(test_result)
+        print("PREDICTION:", prediction)    
+    
+
+# If there's a model in storage, use it. 
+if (os.path.exists('./models/model.pkl')):
+    model = joblib.load("./models/model.pkl")
+    tfidf = joblib.load("./models/tfidf.pkl")
+    print ("Loaded model from storage.")
+    test_model(model, tfidf)
+# Else, create a new model.
+else:
+    # Print message to reflect that no model is stored
+    print("No model stored. Creating new one...")
+    create_model()
