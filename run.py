@@ -75,12 +75,27 @@ def test_model(model, tfidf):
         print("PREDICTION:", prediction)    
     
 
-# If there's a model in storage, use it. 
+# If there's a model in storage
 if (os.path.exists('./models/model.pkl')):
-    model = joblib.load("./models/model.pkl")
-    tfidf = joblib.load("./models/tfidf.pkl")
-    print ("Loaded model from storage.")
-    test_model(model, tfidf)
+    # Ask the user if they want to use the stored model
+    model_choice = input("There's already a model stored. Would you like to use it? (Y/N): ").lower()
+
+    # If the user chooses NOT to use the stored model
+    if (model_choice == 'n'):
+        # Tell user that old model will be erased and new one will be created
+        confirmation = input("Continuing will erase the existing model. Do you want to continue? (Y/N): ").lower()
+        if (confirmation == 'y'):
+            print("Erased stored model. Creating new one...")
+            create_model()
+
+    # If the user chooses to use the stored model
+    if (model_choice == 'y' or confirmation =='n'):
+        # Load the model from storage
+        model = joblib.load("./models/model.pkl")
+        tfidf = joblib.load("./models/tfidf.pkl")
+        print ("Loaded model from storage.")
+        # Test the model
+        test_model(model, tfidf)
 # Else, create a new model.
 else:
     # Print message to reflect that no model is stored
