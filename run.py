@@ -72,8 +72,11 @@ def test_model(model, tfidf):
         print(test_domains[domain])
         test_result = tfidf.transform([test_domains[domain]])
         prediction = model.predict(test_result)
-        print("PREDICTION:", prediction)    
-    
+        print("PREDICTION:", prediction)  
+
+def erase_model():
+    os.remove("./models/model.pkl")
+    os.remove("./models/tfidf.pkl")  
 
 # If there's a model in storage
 if (os.path.exists('./models/model.pkl')):
@@ -86,6 +89,7 @@ if (os.path.exists('./models/model.pkl')):
         confirmation = input("Continuing will erase the existing model. Do you want to continue? (Y/N): ").lower()
         if (confirmation == 'y'):
             print("Erased stored model. Creating new one...")
+            erase_model()
             create_model()
 
     # If the user chooses to use the stored model
