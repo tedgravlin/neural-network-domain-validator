@@ -1,11 +1,24 @@
 import csv
 
 comma = ","
-#label = "good"
-label = "bad"
+
+# Prompt the user for the label (good or bad)
+def get_label():
+  success = False
+
+  while (success != True):
+    label = input("Please enter the type of domains you are adding (good/bad): ").lower()
+    if (label == 'good' or label == 'bad'):
+      success = True
+      return label
+    else:
+      print("ERROR! The domains must be 'good' or 'bad'\n")
+
+# Set the label to the user input
+label = get_label()
 
 # Open the CSV file
-with open('stripped-blocklist.csv', mode ='r') as fileInput:
+with open('incomingdata.csv', mode ='r') as fileInput:
   # Open the CSV file
   with open('dataset.csv', mode ='a', newline='') as fileOutput:
     # open reader to CSV file
