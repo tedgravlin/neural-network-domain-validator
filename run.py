@@ -32,12 +32,12 @@ def create_model():
     # MLP model
     model = MLPClassifier(
         activation='relu',
-        solver='adam', 
         batch_size=50,
-        alpha=1e-5,
-        hidden_layer_sizes=(150,140,130),
+        hidden_layer_sizes=(256),
         random_state=42,
-        learning_rate='adaptive'
+        learning_rate='constant',
+        learning_rate_init=0.001,
+        verbose=True,
     )
 
     # Fit the model
