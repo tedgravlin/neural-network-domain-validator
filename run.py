@@ -6,7 +6,9 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 import joblib
 import os
+import matplotlib.pyplot as plot
 
+# FUNCTION: Train the model and store it locally
 def create_model():
     # Get the dataset CSV file
     dataset = pd.read_csv("dataset.csv")
@@ -15,6 +17,8 @@ def create_model():
     dataframe = pd.DataFrame(dataset)
 
     # Dataset columns
+    #features = ['Num Of Sections','TLD','TLD Length','Domain','Domain Length','URL']
+    #x = dataframe[features]
     x = dataframe['URL']
     y = dataframe['Label']
 
@@ -22,8 +26,7 @@ def create_model():
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
     # Initialize the TF-IDF vectorizer
-    tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5, norm='l2', encoding='latin-1', ngram_range=(1, 2),
-    stop_words='english')
+    tfidf = TfidfVectorizer(min_df=1)
 
     # Generate features for x_train and x_test
     features_train = tfidf.fit_transform(x_train)
@@ -57,23 +60,32 @@ def create_model():
     # Print the model accuracy
     print("Accuracy: ", model.score(features_test,y_test) * 100)
 
+    # TODO: Accuracy over each iteration
+    # TODO: Validation over each iteration
+
     # Store the model in storage
     joblib.dump(model,"./models/model.pkl")
     # Store the vectorizer in storage
     joblib.dump(tfidf, "./models/tfidf.pkl")
 
+    # Show the loss curve
+    plot.plot(model.loss_curve_)
+    plot.show()
+
+# FUNCTION: Grab the model from storage and test it with some domains
 def test_model(model, tfidf):
     # Test domains
-    test_domains = ['google.com','googl.com']
+    test_domains = ['google.com','googl.com','facebook.com','google.nl', 'www.theverge.com', 'theverge.com']
 
     # Use the model to predict the label for each of 
     # the test domains and then print the result
     for domain in range(len(test_domains)):
-        print(test_domains[domain])
+        print("URL:", test_domains[domain])
         test_result = tfidf.transform([test_domains[domain]])
         prediction = model.predict(test_result)
         print("PREDICTION:", prediction)  
 
+# FUNCTION: Delete the model from storage
 def erase_model():
     os.remove("./models/model.pkl")
     os.remove("./models/tfidf.pkl")  
