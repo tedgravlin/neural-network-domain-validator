@@ -1,4 +1,9 @@
 Label,Num Of Sections,TLD,TLD Length,Domain,Domain Length,URL
-good,3,org,3,signalusers,11,community.signalusers.org
+good,2,com,3,google,6,google.com
+bad,2,nl,2,google,6,google.nl
 good,2,edu,3,emich,5,emich.edu
+good,3,edu,3,emich,5,canvas.emich.edu
+good,3,com,3,www.theverge,8,www.theverge.com
 good,2,com,3,theverge,8,theverge.com
+bad,3,com,3,samsungads,10,config.samsungads.com
+bad,2,nl,2,ejwiejdi,8,ejwiejdi.nl

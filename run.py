@@ -91,6 +91,7 @@ def test_model(model, tfidf):
     # Turn the test dataset into a pandas data frame
     dataframe = pd.DataFrame(test_dataset)
     x = dataframe[['Num Of Sections', 'TLD', 'TLD Length', 'Domain', 'Domain Length', 'URL']]
+    y = dataframe['Label']
 
     # Separate text and numeric features
     text_features = ['TLD', 'Domain', 'URL']
@@ -111,7 +112,15 @@ def test_model(model, tfidf):
     # the test domains and then print the result
     print("URLS:", x['URL'].to_list())
     prediction = model.predict(features_test)
-    print("PREDICTIONS:", prediction)  
+    print("\nPREDIC:", prediction)  
+    count = 0
+    correct_count = 0
+    for label in range(len(y)):
+        if (prediction[label] == y.to_list()[label]):
+            correct_count = correct_count + 1
+            count = label
+    print("ACTUAL:", y.to_list())
+    print("CORRECT PREDICTIONS:", correct_count,"/",count)
 
 # FUNCTION: Delete the model from storage
 def erase_model():
