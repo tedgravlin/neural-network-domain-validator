@@ -13,7 +13,7 @@ import matplotlib.pyplot as plot
 # FUNCTION: Train the model and store it locally
 def create_model():
     # Get the dataset CSV file
-    dataset = pd.read_csv("dataset.csv")
+    dataset = pd.read_csv("./dataset/dataset.csv")
 
     # Turn the dataset into a pandas data frame
     dataframe = pd.DataFrame(dataset)
@@ -46,11 +46,11 @@ def create_model():
     # MLP model
     model = MLPClassifier(
         activation='relu',
-        batch_size=50,
+        batch_size=64,
         hidden_layer_sizes=(256),
-        random_state=42,
         learning_rate='constant',
-        learning_rate_init=0.001,
+        learning_rate_init=0.005,
+        max_iter=10,
         verbose=True,
     )
 
@@ -79,14 +79,10 @@ def create_model():
     # Store the vectorizer in storage
     joblib.dump(tfidf, "./models/tfidf.pkl")
 
-    # Show the loss curve
-    plot.plot(model.loss_curve_)
-    plot.show()
-
 # FUNCTION: Grab the model from storage and test it with some domains
 def test_model(model, tfidf):
     # Get the test dataset CSV file
-    test_dataset = pd.read_csv("testdataset.csv")
+    test_dataset = pd.read_csv("./dataset/testdataset.csv")
 
     # Turn the test dataset into a pandas data frame
     dataframe = pd.DataFrame(test_dataset)
@@ -154,3 +150,6 @@ else:
     # Print message to reflect that no model is stored
     print("No model stored. Creating new one...")
     create_model()
+
+
+# TODO: Add .edu domains to the dataset
