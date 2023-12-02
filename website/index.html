@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Domain Validator</title>
+    <script type="module" src="https://pyscript.net/releases/2023.11.2/core.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Neural Network Domain Validator</h1>
+    </header>
+    <label for="url-input">Website URL</label>
+    <input type="text" id="url-input" placeholder="Website URL">
+    <button py-click="get_url">Check URL</button>
+    <p id="result-text"></p>
+    <script type="py" src="main.py" config="./pyscript.json"></script>
+</body>
+
+</html>
