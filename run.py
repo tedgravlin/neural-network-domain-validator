@@ -25,7 +25,7 @@ def create_model():
     numeric_features = ['Num Of Sections', 'TLD Length', 'Domain Length']
 
     # Split training and test data
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.4, random_state=0)
 
     # Initialize the TF-IDF vectorizer
     tfidf = TfidfVectorizer(min_df=1)
@@ -46,11 +46,10 @@ def create_model():
     # MLP model
     model = MLPClassifier(
         activation='relu',
-        batch_size=64,
+        batch_size=128,
         hidden_layer_sizes=(256),
-        learning_rate='constant',
-        learning_rate_init=0.005,
-        max_iter=10,
+        learning_rate='adaptive',
+        max_iter=20,
         verbose=True,
     )
 
@@ -114,9 +113,10 @@ def test_model(model, tfidf):
     for label in range(len(y)):
         if (prediction[label] == y.to_list()[label]):
             correct_count = correct_count + 1
-            count = label
+        count = count + 1
     print("ACTUAL:", y.to_list())
     print("CORRECT PREDICTIONS:", correct_count,"/",count)
+    print("ACCURACY OF THIS TEST:", (correct_count/count) * 100)
 
 # FUNCTION: Delete the model from storage
 def erase_model():

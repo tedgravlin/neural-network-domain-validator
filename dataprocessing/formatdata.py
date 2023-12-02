@@ -18,9 +18,9 @@ def get_label():
 label = get_label()
 
 # Open the CSV file
-with open('incomingdata.csv', mode ='r', encoding="utf-8") as fileInput:
+with open('./dataprocessing/incomingdata.csv', mode ='r', encoding="utf-8") as fileInput:
   # Open the CSV file
-  with open('newdataset.csv', mode ='a', newline='', encoding="utf-8") as fileOutput:
+  with open('./dataset/testdataset.csv', mode ='a', newline='', encoding="utf-8") as fileOutput:
     # open reader to CSV file
     csvRead = csv.reader(fileInput)
     # open writer to CSV file

@@ -1,7 +1,7 @@
 import csv
 
 # Open the CSV file
-with open('blocklist.csv', mode ='r') as fileInput:
+with open('incomingdata.csv', mode ='r') as fileInput:
   # Open the CSV file
   with open('stripped-blocklist.csv', mode ='w', newline='') as fileOutput:
     # open reader to CSV file
