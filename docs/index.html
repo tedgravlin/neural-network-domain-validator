@@ -3,6 +3,9 @@
 
 <head>
     <title>Domain Validator</title>
+    <!-- Import CSS -->
+    <link rel="stylesheet" href="main.css">
+    <!-- Import pyscript -->
     <script type="module" src="https://pyscript.net/releases/2023.11.2/core.js"></script>
 </head>
 
@@ -13,9 +16,9 @@
     <label for="url-input">Website URL</label>
     <input type="text" id="url-input" placeholder="Website URL">
     <button py-click="get_url">Check URL</button>
-    <p id="progress-text"></p>
+    <p id="progress-text">Loading pyscript. Please wait...</p>
     <p id="result-text"></p>
-    <script type="py" src="main.py" config="./pyscript.json"></script>
+    <script type="py" src="./main.py" config="./pyscript.json"></script>
 </body>
 
 </html>

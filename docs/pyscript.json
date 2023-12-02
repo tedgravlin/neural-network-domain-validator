@@ -1,4 +1,12 @@
 {
-    "packages": ["pandas", "joblib", "scikit-learn"]
-}
+  "packages": [
+    "pandas",
+    "joblib",
+    "scikit-learn"
+  ],
+  "files": {
+    "../models/model.pkl": "model.pkl",
+    "../models/tfidf.pkl": "tfidf.pkl"
+  }
 
+}
