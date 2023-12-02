@@ -13,12 +13,18 @@
     <header>
         <h1>Neural Network Domain Validator</h1>
     </header>
-    <label for="url-input">Website URL</label>
-    <input type="text" id="url-input" placeholder="Website URL">
-    <button py-click="get_url">Check URL</button>
-    <p id="progress-text">Loading pyscript. Please wait...</p>
-    <p id="result-text"></p>
-    <script type="py" src="./main.py" config="./pyscript.json"></script>
+    <main>
+        <div class="card">
+            <div class="input-container" id="input-container">
+                <label for="url-input">Website URL</label>
+                <input type="text" id="url-input" placeholder="Website URL">
+                <button py-click="get_url">Check URL</button>
+                <p id="result-text"></p>
+            </div>
+            <p id="progress-text">Loading pyscript. Please wait...</p>
+            <script type="py" src="./main.py" config="./pyscript.json"></script>
+        </div>
+    </main>
 </body>
 
 </html>

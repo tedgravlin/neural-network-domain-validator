@@ -5,10 +5,15 @@ from pyscript import display
 from sklearn.preprocessing import StandardScaler
 from scipy.sparse import hstack
 import os
+from pyweb import pydom
+
+# Get the input container element
+input_container = pydom['#input-container']
+input_container.style["display"] = "block"
 
 # Get the progress text HTML element
 progress_text = document.querySelector("#progress-text")
-progress_text.innerText = "Pyscipt loaded."
+progress_text.innerText = ""
 
 # Gets the model and returns it
 def load_files():
