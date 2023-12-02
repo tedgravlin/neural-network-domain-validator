@@ -4,8 +4,8 @@ from pyscript import document
 from pyscript import display
 from sklearn.preprocessing import StandardScaler
 from scipy.sparse import hstack
-import os
 from pyweb import pydom
+from os.path import exists
 
 # Get the input container element
 input_container = pydom['#input-container']
@@ -21,13 +21,9 @@ def load_files():
     tfidf = joblib.load('tfidf.pkl')
     test_dataset = pd.read_csv("testdataset.csv")
 
-    progress_text.innerText = "Model load complete."
-
     return model, tfidf, test_dataset
 
 def test_model(model, tfidf, test_dataset):
-    progress_text.innerText = "Testing URL against model..."
-
     # Turn the test dataset into a pandas data frame
     dataframe = pd.DataFrame(test_dataset)
     x = dataframe[['Num Of Sections', 'TLD', 'TLD Length', 'Domain', 'Domain Length', 'URL']]
