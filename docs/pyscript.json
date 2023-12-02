@@ -6,7 +6,7 @@
   ],
   "files": {
     "../models/model.pkl": "model.pkl",
-    "../models/tfidf.pkl": "tfidf.pkl"
+    "../models/tfidf.pkl": "tfidf.pkl",
+    "../dataset/testdataset.csv": "testdataset.csv"
   }
-
 }
