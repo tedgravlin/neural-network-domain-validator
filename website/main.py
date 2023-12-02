@@ -9,46 +9,68 @@ from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler
 from scipy.sparse import hstack
 from js import XMLHttpRequest
+from js import window
 import io
 from os.path import exists
 import os
+import re
+
+# Get the progress text HTML element
+progress_text = document.querySelector("#progress-text")
 
 # Gets the model and returns it
 def load_model():
-    model_url = 'http://127.0.0.1:5500/models/model.pkl'
-    req = XMLHttpRequest.new()
-    req.open("GET", model_url, False)
-    req.send(None)
-    model_response = (req.response)
 
+    progress_text.innerText = "Removing old model..."
+
+    # Delete the model files if they already exist
     if (exists('model.pkl')):
-        # Delete model.pkl
         os.remove('model.pkl')
-
     if (exists('tfidf.pkl')):
-        # Delete model.pkl
         os.remove('tfidf.pkl')
 
+    # Check if the current domain is an IP address (hosted locally) or a real domain (hosted on GH pages)
+    if (re.search("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", window.location.hostname)):
+        model_url = 'http://127.0.0.1:5500/models/model.pkl'
+        tfidf_url = 'http://127.0.0.1:5500/models/tfidf.pkl'
+    else:
+        model_url = 'https://github.com/tedgravlin/neural-network-domain-validator/blob/a792b3c04d16be88eca95f3d6948d25f020722e2/models/model.pkl'
+        tfidf_url = 'https://github.com/tedgravlin/neural-network-domain-validator/blob/a792b3c04d16be88eca95f3d6948d25f020722e2/models/tfidf.pkl'
+    
+    progress_text.innerText = "Fetching model.pkl..."
+
+    # Get model.pkl
+    model_req = XMLHttpRequest.new()
+    model_req.open("GET", model_url, False)
+    model_req.send(None)
+    model_response = (model_req.response)
+
+    progress_text.innerText = "Writing to model.pkl..."
+
     # Write the contents of the model response to model.pkl
-    with open('model.pkl', 'w') as f:
-        f.write(model_response)
+    with open('model.pkl', 'w') as model_file:
+        model_file.write(model_response)
 
-    model_file_exists = exists('model.pkl')
+    progress_text.innerText = "Fetching tfidf.pkl..."
 
-    model_url = 'http://127.0.0.1:5500/models/tfidf.pkl'
-    tfreq = XMLHttpRequest.new()
-    tfreq.open("GET", model_url, False)
-    tfreq.send(None)
-    tfidf_response = (tfreq.response)
+    # Get tfidfk.pkl
+    tfidf_req = XMLHttpRequest.new()
+    tfidf_req.open("GET", tfidf_url, False)
+    tfidf_req.send(None)
+    tfidf_response = (tfidf_req.response)
+
+    progress_text.innerText = "Writing to tfidf.pkl..."
+
     # Write the contents of the tfidf response to tfidf.pkl
-    with open('tfidf.pkl', 'w') as f:
-        f.write(tfidf_response)
-
-    tfidf_file_exists = exists('tfidf.pkl')
+    with open('tfidf.pkl', 'w') as tfidf_file:
+        tfidf_file.write(tfidf_response)
 
     #model = joblib.load(model_file)
     #tfidf = joblib.load(tfidf_file)
-    return model_file_exists, tfidf_file_exists
+
+    progress_text.innerText = "Model load complete."
+
+    return exists('model.pkl'), exists('tfidf.pkl')
 
 def test_model(model, tfidf):
     # Get the test dataset CSV file
@@ -96,9 +118,7 @@ def get_url(event):
     input_text = document.querySelector("#url-input")
     url = input_text.value
     output_text = document.querySelector("#result-text")
-    #output_text.innerText = url
     output_text.innerText = model
-
 
 
 
