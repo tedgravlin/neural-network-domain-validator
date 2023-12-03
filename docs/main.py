@@ -16,6 +16,9 @@ input_container.style["display"] = "block"
 progress_text = document.querySelector("#progress-text")
 progress_text.innerText = ""
 
+# Get the result div element
+result_div = pydom['#result-div']
+
 # Get the result text HTML element
 result_text = document.querySelector('#result-text')
 
@@ -63,8 +66,19 @@ def test_model(model, tfidf, formatted_url):
 
     # Use the model to predict the label for the url
     prediction = model.predict(features_test)
-    result_text.innerText = "Prediction: " + prediction[0]
-    
+
+    # If the prediction is good
+    if (prediction[0] == 'good'):
+        result_text.innerText = "Prediction: Good"
+        result_div.style["color"] = "green"
+        result_div.style["border-color"] = "green"
+        result_div.style["display"] = "block"
+    # If the prediction is bad
+    elif (prediction[0] == 'bad'):
+        result_text.innerText = "Prediction: Bad"
+        result_div.style["color"] = "red"
+        result_div.style["border-color"] = "red"
+        result_div.style["display"] = "block"
 
 def get_url(event):
     input_text = document.querySelector("#url-input")

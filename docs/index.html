@@ -22,10 +22,15 @@
     <main>
         <div class="card">
             <div class="input-container" id="input-container">
-                <label for="url-input">Website URL</label>
-                <input type="text" id="url-input" placeholder="Website URL">
-                <button py-click="get_url">Check URL</button>
-                <p id="result-text"></p>
+                <h2>Check a website</h2>
+                <label for="url-input">Website</label>
+                <br>
+                <input class="website-input" type="text" id="url-input" placeholder="https://website.com">
+                <br>
+                <button class="submit-button" py-click="get_url">Check URL</button>
+                <div id="result-div" class="result-div">
+                    <p id="result-text">Prediction: good</p>
+                </div>
             </div>
             <p id="progress-text">Loading pyscript. Please wait...</p>
             <script type="py" src="./main.py" config="./pyscript.json"></script>
