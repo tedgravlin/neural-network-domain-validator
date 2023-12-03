@@ -8,7 +8,9 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler
 from scipy.sparse import hstack
-import matplotlib.pyplot as plot
+import matplotlib.pyplot as plt
+import numpy as np
+np.random.seed(1)
 
 # FUNCTION: Train the model and store it locally
 def create_model():
@@ -49,12 +51,37 @@ def create_model():
         batch_size=128,
         hidden_layer_sizes=(256),
         learning_rate='adaptive',
-        max_iter=20,
         verbose=True,
     )
 
-    # Fit the model
-    model.fit(features_train, y_train)
+    # The number of epochs to run
+    N_EPOCHS = 10
+    N_CLASSES = np.unique(y_train)
+
+    scores_train = []
+    scores_test = []
+
+    # EPOCH
+    epoch = 0
+    while epoch < N_EPOCHS:
+        print('Epoch: ', epoch)
+        model.partial_fit(features_train, y_train, classes=N_CLASSES)
+            
+        # SCORE TRAIN
+        scores_train.append(model.score(features_train, y_train))
+
+        # SCORE TEST
+        scores_test.append(model.score(features_test, y_test))
+
+        epoch += 1
+
+    # Plot accuracy over iterations
+    plt.plot(scores_train, color='green', alpha=0.8, label='Train')
+    plt.plot(scores_test, color='magenta', alpha=0.8, label='Test')
+    plt.title("Accuracy over epochs", fontsize=14)
+    plt.xlabel('Epochs')
+    plt.legend(loc='upper left')
+    plt.show()
 
     # Predicting the test set results
     predictions = model.predict(features_test)
@@ -69,9 +96,6 @@ def create_model():
 
     # Print the model accuracy
     print("Accuracy: ", model.score(features_test,y_test) * 100)
-
-    # TODO: Accuracy over each iteration
-    # TODO: Validation over each iteration
 
     # Store the model in storage
     joblib.dump(model,"./models/model.pkl")
